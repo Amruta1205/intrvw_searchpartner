@@ -13,6 +13,7 @@ public enum creditCardType {
 	private int startNumber;
 	
 	
+	
 	private creditCardType(String ttype, int sstartNumber)
 	{
 		type = ttype;

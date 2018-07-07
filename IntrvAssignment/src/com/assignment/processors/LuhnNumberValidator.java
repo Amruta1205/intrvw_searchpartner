@@ -1,7 +1,9 @@
 package com.assignment.processors;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -9,26 +11,44 @@ import com.assignment.model.CreditCard;
 import com.assignment.model.creditCardType;
 
 
-public class LuhnNumberValidator {
+public class LuhnNumberValidator implements Callable<CreditCard>{
 
 	
 	private static LuhnNumberValidator Instance = null;
 	private static ConcurrentHashMap<String , AtomicLong> creditCardStore = 
 			new ConcurrentHashMap<>();
 
+//	ThreadLocal<ArrayList<CreditCard>> workCreditCards;
+	CreditCard cc;
 	
-	public static ArrayList<CreditCard> validateCreditCard(ArrayList<CreditCard> listOfCards) {				
+	public LuhnNumberValidator(CreditCard cc) {
+		this.cc = cc;
+	}
+	
+	@Override
+	public CreditCard call() throws Exception {
+		return validateCreditCard(this.cc);
+	}
+	
+	
+	public CreditCard validateCreditCard(CreditCard cc) {				
 		Long ccNumber = null;
+		
+		if(validateNumber(cc.getCreditCardNo())){
+			cc.setExpiryDate(new Date());
+		} else {
+			cc.setDiscardNumber(true);
+		}
 	
-		for(CreditCard cCard : listOfCards) {
+	/*	for(CreditCard cCard : listOfCards.get()) {
 			if(validateNumber(cCard.getCreditCardNo())){
 				cCard.setExpiryDate(new Date());
 			} else {
 				cCard.setDiscardNumber(true);
 			}
-		}
+		}*/
 	
-		return listOfCards;
+		return cc;
 	}
 	
 	private static boolean validateNumber(Long ccNumber) {

@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.assignment.model.CreditCard;
 import com.assignment.model.creditCardType;
+import com.assignment.processors.CreditCardNumberProcessor;
 import com.assignment.processors.LuhnNumberGenerator;
 import com.assignment.processors.LuhnNumberValidator;
 
@@ -54,6 +55,6 @@ public class CCRestService {
 	@Consumes({MediaType.APPLICATION_JSON})
 	
 	public ArrayList<CreditCard> validateCreditCards(ArrayList<CreditCard> creditCards){									
-		return LuhnNumberValidator.validateCreditCard(creditCards);
+		return CreditCardNumberProcessor.validateCreditCards(creditCards);
 	}
 }
