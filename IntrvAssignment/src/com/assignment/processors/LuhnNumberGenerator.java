@@ -33,25 +33,25 @@ public class LuhnNumberGenerator {
 	public static ArrayList<CreditCard> generateCreditCardNumber(creditCardType cardType, int count) {				
 		Long ccNumber = null;
 		ArrayList<CreditCard> listOfCards = new ArrayList<>();
-		if(creditCardStore.isEmpty()) {
-			String xyz = String.format("%1$-15s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0');
+		if(!creditCardStore.isEmpty() && creditCardStore.containsKey(cardType.getType())) {
+			creditCardStore.get(cardType.getType()).compareAndSet(999999999999999L, 
+					(Long.valueOf(String.format("%1$-16s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0'))));
+			ccNumber = creditCardStore.get(cardType.getType()).incrementAndGet();			
+		} else {			
+			String xyz = String.format("%1$-16s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0');
 			System.out.println("initival valus is : " + xyz);
 			ccNumber = Long.valueOf(xyz);			
 			creditCardStore.put(cardType.getType(), (new AtomicLong(ccNumber)));
-		} else {
-			creditCardStore.get(cardType.getType()).compareAndSet(999999999999999L, 
-					(Long.valueOf(String.format("%1$-15s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0'))));
-			ccNumber = creditCardStore.get(cardType.getType()).incrementAndGet();									
 		}
 				
 		for(int i=0; i< count ; i++) {
 			int checkNum = getLuhnCheckNumber(ccNumber);
-			String xyz = "" + ccNumber + checkNum + "";
-			CreditCard cNew = new CreditCard(Long.valueOf(xyz));
+			String xyz = ccNumber + checkNum + "";
+			CreditCard cNew = new CreditCard(Long.valueOf(xyz), cardType);
 			listOfCards.add(cNew);
 			if(i < count-1) {
 				creditCardStore.get(cardType.getType()).compareAndSet(999999999999999L, 
-						(Long.valueOf(String.format("%1$-15s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0'))));
+						(Long.valueOf(String.format("%1$-16s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0'))));
 				ccNumber = creditCardStore.get(cardType.getType()).incrementAndGet();
 			}						
 		}

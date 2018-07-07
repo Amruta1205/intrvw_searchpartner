@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.assignment.model.CreditCard;
+import com.assignment.model.CreditCardist;
 import com.assignment.model.creditCardType;
 import com.assignment.processors.CreditCardNumberProcessor;
 import com.assignment.processors.LuhnNumberGenerator;
@@ -45,16 +46,16 @@ public class CCRestService {
 			return null;		
 		}
 		
-		return LuhnNumberGenerator.generateCreditCardNumber(cardTypeObj, count);
+	//	return LuhnNumberGenerator.generateCreditCardNumber(cardTypeObj, count);
+		return CreditCardNumberProcessor.getCreditCardNumbers(cardTypeObj, count);
 		
 	}
 	
 	@POST
 	@Path("validate")
-	@Produces({MediaType.APPLICATION_JSON})
-	@Consumes({MediaType.APPLICATION_JSON})
-	
+	@Produces("application/json")
+	@Consumes({MediaType.APPLICATION_JSON})	
 	public ArrayList<CreditCard> validateCreditCards(ArrayList<CreditCard> creditCards){									
-		return CreditCardNumberProcessor.validateCreditCards(creditCards);
+		return CreditCardNumberProcessor.validateCreditCards(creditCards);		
 	}
 }

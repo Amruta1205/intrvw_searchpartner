@@ -34,25 +34,24 @@ public class LuhnNumberValidator implements Callable<CreditCard>{
 	public CreditCard validateCreditCard(CreditCard cc) {				
 		Long ccNumber = null;
 		
-		if(validateNumber(cc.getCreditCardNo())){
+		if(validateNumber(cc)){
 			cc.setExpiryDate(new Date());
 		} else {
 			cc.setDiscardNumber(true);
 		}
 	
-	/*	for(CreditCard cCard : listOfCards.get()) {
-			if(validateNumber(cCard.getCreditCardNo())){
-				cCard.setExpiryDate(new Date());
-			} else {
-				cCard.setDiscardNumber(true);
-			}
-		}*/
-	
 		return cc;
 	}
 	
-	private static boolean validateNumber(Long ccNumber) {
-		String str = String.valueOf(ccNumber);
+	private static boolean validateNumber(CreditCard cc) {
+		String str = String.valueOf(cc.getCreditCardNo());
+		
+		// Validate if Card Number starts with correct valus as per card Number
+		creditCardType cardType = creditCardType.valueOf(cc.getCardType());
+		if(!String.valueOf(cc.getCreditCardNo()).startsWith(String.valueOf(cardType.getStartNumber()))) {
+			return false;
+		}
+			
 		int[] ints = new int[str.length()];
 		for (int i = 0; i < str.length(); i++) {
 			ints[i] = Integer.parseInt(str.substring(i, i + 1));

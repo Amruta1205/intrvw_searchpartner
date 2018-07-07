@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class CreditCard {
 
+	private String cardType;
 	private long creditCardNo;
 	private Date expiryDate;
 	private boolean discardNumber;
@@ -17,7 +18,11 @@ public class CreditCard {
 		this.creditCardNo = cNo;
 		this.discardNumber = false;
 	}
-	
+	public CreditCard(long cNo, creditCardType cardType) {
+		this.creditCardNo = cNo;
+		this.discardNumber = false;
+		this.cardType = cardType.getType();
+	}
 	public long getCreditCardNo() {
 		return creditCardNo;
 	}
@@ -35,6 +40,12 @@ public class CreditCard {
 	}
 	public void setDiscardNumber(boolean discardNumber) {
 		this.discardNumber = discardNumber;
+	}
+	public String getCardType() {
+		return cardType;
+	}
+	public void setCardType(String cardType) {
+		this.cardType = cardType;
 	}
 
 	

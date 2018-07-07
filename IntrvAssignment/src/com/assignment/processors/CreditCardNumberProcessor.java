@@ -1,6 +1,7 @@
 package com.assignment.processors;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,20 +26,34 @@ public class CreditCardNumberProcessor {
 	}
 	
 	
-	public ArrayList<CreditCard> getCreditCardNumbers(creditCardType cardType, int count){		
-		return LuhnNumberGenerator.generateCreditCardNumber(cardType, count);		
+	public static ArrayList<CreditCard> getCreditCardNumbers(creditCardType cardType, int count){
+		return LuhnNumberGenerator.generateCreditCardNumber(cardType, count);
+		//return validateCreditCards(LuhnNumberGenerator.generateCreditCardNumber(cardType, count));
 	}
 	
 	public static ArrayList<CreditCard> validateCreditCards(ArrayList<CreditCard> creditCards){
 		
+		ArrayList<CreditCard> validatedCreditCards = new ArrayList<>();
+
 		for(CreditCard ccNew : creditCards) {
 			LuhnNumberValidator validateTask = new LuhnNumberValidator(ccNew);
 			Future<CreditCard> fut =  executor.submit(validateTask);
+			CreditCard cc=null;
+			try {
+				cc = fut.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				cc = new CreditCard();
+				cc.setDiscardNumber(true);				
+				e.printStackTrace();
+			}
+			validatedCreditCards.add(cc);
 		}
-		
-		
-		return creditCards;
-		//return LuhnNumberGenerator.generateCreditCardNumber(cardType, count);		
+				
+		return validatedCreditCards;		
 	}
 	
 }
