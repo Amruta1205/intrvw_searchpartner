@@ -48,6 +48,17 @@ public class CreditCard {
 		this.cardType = cardType;
 	}
 
-	
-	
+@Override
+public String toString() {
+	String validStatus = (this.isDiscardNumber() ? " Invalid-Discard " : " Valid");
+	return "CreditCard Type : " + this.getCardType() + " , Credit Card No : " + this.getCreditCardNo() +
+			" , ValidStatus : " + validStatus + " , Expiry Date : " + this.expiryDate; 
+}	
+
+@Override
+public boolean equals(Object obj) {
+
+	CreditCard obj2 = (CreditCard)obj;
+	return this.creditCardNo==obj2.getCreditCardNo() && this.cardType.equals(obj2.getCardType());
+}
 }

@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.json.JsonObject;
@@ -19,6 +20,7 @@ import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.assignment.model.CreditCard;
@@ -39,11 +41,21 @@ public class GenerateAndValidateCCNumbers {
 		CreditCard cc = new CreditCard();
 		cc.setCardType(creditCardType.MASTER.getType());
 		cc.setCreditCardNo(5000000000000009L);
-		
+		CreditCard cc2 = new CreditCard();
+		cc2.setCardType(creditCardType.MASTER.getType());
+		cc2.setCreditCardNo(5000000000000011L);
+		ArrayList<CreditCard> cList = new ArrayList<>();
+		cList.add(cc); cList.add(cc2);
 		ObjectMapper oMapper = new ObjectMapper();
 		try {
+			
+			System.out.println("Credit Cards List for Validation : ---");
+			for(CreditCard CC : cList) {
+				System.out.println(CC);
+			}
+			
 			ByteArrayOutputStream oo = new ByteArrayOutputStream();
-			JSONObject jObj = new JSONObject(oMapper.writeValueAsString(cc));
+			String jsonArray = oMapper.writeValueAsString(cList);
 			URL url = new URL ("http://localhost:9999/IntrvAssignment/rest/validate");
 			URLConnection con = url.openConnection();
 			con.setDoOutput(true);
@@ -51,19 +63,23 @@ public class GenerateAndValidateCCNumbers {
 			con.setConnectTimeout(1200);
 			con.setReadTimeout(1200);
 			OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream());
-			out.write(jObj.toString());
+			out.write(jsonArray);
 			out.close();
-			
-			
-			   
-		 
-		      
-									
+						
+			StringBuffer strBuff = new StringBuffer();
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			while(in.readLine()!=null) {
-				
+			String inputLine= null;
+			while((inputLine = in.readLine()) !=null) {
+				strBuff.append(inputLine);
 			}
-			System.out.println("End -----");
+			System.out.println("Validated credit Card List ---");
+			if(strBuff.length() > 0) {
+				CreditCard[] ccResponse = oMapper.readValue(strBuff.toString(), CreditCard[].class);				
+				for(CreditCard CC : Arrays.asList(ccResponse)) {
+					System.out.println(CC);
+				} 
+			}
+			System.out.println("Finished -----");
 			in.close();
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block

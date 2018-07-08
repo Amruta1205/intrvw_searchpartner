@@ -36,7 +36,7 @@ public class LuhnNumberGenerator {
 		if(!creditCardStore.isEmpty() && creditCardStore.containsKey(cardType.getType())) {
 			creditCardStore.get(cardType.getType()).compareAndSet(999999999999999L, 
 					(Long.valueOf(String.format("%1$-16s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0'))));
-			ccNumber = creditCardStore.get(cardType.getType()).incrementAndGet();			
+			ccNumber = creditCardStore.get(cardType.getType()).addAndGet(10);			
 		} else {			
 			String xyz = String.format("%1$-16s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0');
 			System.out.println("initival valus is : " + xyz);
@@ -52,7 +52,7 @@ public class LuhnNumberGenerator {
 			if(i < count-1) {
 				creditCardStore.get(cardType.getType()).compareAndSet(999999999999999L, 
 						(Long.valueOf(String.format("%1$-16s", String.valueOf(cardType.getStartNumber())).replace( ' ', '0'))));
-				ccNumber = creditCardStore.get(cardType.getType()).incrementAndGet();
+				ccNumber = creditCardStore.get(cardType.getType()).addAndGet(10);
 			}						
 		}
 		return listOfCards;
