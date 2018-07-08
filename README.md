@@ -19,7 +19,9 @@ Section 3:
 JUNIT : Done - 2 test classes to test generation and validation each.
 output screen shot attached.
      
-Note - Have persisted the credit card numbers only in memory not in any persistant store as of now - should be done to avoiod duplication. Note - Since URLPattern used is /* the welcome-html does not appear - This was done to satisy the req : http://localhost:9999/CCEngine/Visa/2
+Note - Have persisted the credit card numbers only in memory not in any persistant store as of now - should be done to avoiod duplication. 
+
+Note - Since URLPattern used is /* the welcome-html does not appear - This was done to satisy the req : http://localhost:9999/CCEngine/Visa/2
 
                 
 Section 4:
