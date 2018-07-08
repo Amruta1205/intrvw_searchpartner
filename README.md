@@ -10,11 +10,17 @@ JDK Version : java 8.0.44
 
 Section 3:
  Sonar : not done
- Output screenShot - attached for Generate.
-                For validate the logic works fine but could not test the rest call to POST List of CreditCards
-                Tested the logic for validating Generated CreditCards through java code, credit cards get validated correctly and the  expiry date also gets appended to it.
+ 
+ Output screenShot - attached for Generate and Validate
+ 
+ Generate can be tested from browser window
+ 
+ To test Validate - have written a Client code - GenerateAndValidateCCNumbers - it makes a rest Call to Validate the CC Numbers.
+ 
                 Note - Have not persisted the credit card numbers - should be done to avoiod duplication.   
-                
+               
+JUNIT : Done - 2 test classes to test generation and validation each.
+output screen shot attached.
                 
                 
 Section 4:
